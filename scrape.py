@@ -18,7 +18,7 @@ def getData(userName):
     info['followers'] = soup.select_one("a[href*=followers]").get_text().strip().split('\n')[0]
     info['following'] = soup.select_one("a[href*=following]").get_text().strip().split('\n')[0]
     
-    #location
+    # mengambil data lokasi pengguna
     try:
         info['location'] = soup.select_one('li[itemprop*=home]').get_text().strip()
     except:
@@ -29,12 +29,12 @@ def getData(userName):
     except:
         info['url'] = ''
     
-    #get Repositories as a dataframe
+    # mengambil data repositori dan diubah menjadi dataframe menggunakan library pandas
     repos = soup.find_all(class_ = 'source')
     repo_info = []
     for repo in repos:
 
-        #repo name and link
+        #repo nama dan link
         try:
             name = repo.select_one('a[itemprop*=codeRepository]').get_text().strip()
             link = 'https://github.com/{}/{}'.format(userName,name)
@@ -42,19 +42,19 @@ def getData(userName):
             name = ''
             link = ''
         
-        #repo update time
+        #repo waktu
         try:
             updated = repo.find('relative-time').get_text()
         except:
             updated = ''
         
-        # programming language
+        # bahasa pemrograman yang digunakan
         try:
             language = repo.select_one('span[itemprop*=programmingLanguage]').get_text()
         except:
             language = ''
         
-        # description
+        # deksripsi
         try:
             description = repo.select_one('p[itemprop*=description]').get_text().strip()
         except:
